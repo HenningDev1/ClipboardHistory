@@ -1,0 +1,229 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ClipboardHistory"
+        x:Class="ClipboardHistory.MainWindow"
+        x:DataType="local:MainWindow"
+        Title="Clipboard History"
+        Width="380" Height="560"
+        SystemDecorations="None"
+        CanResize="False"
+        ShowInTaskbar="False"
+        Topmost="True"
+        Background="Transparent"
+        TransparencyLevelHint="Transparent"
+        FontFamily="avares://Avalonia.Fonts.Inter/Assets#Inter"
+        ShowActivated="True">
+
+  <Window.Styles>
+    <!-- Cards -->
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+      <Setter Property="CornerRadius" Value="12" />
+      <Setter Property="Padding" Value="12,10" />
+      <Setter Property="Margin" Value="0,0,0,8" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="BoxShadow" Value="0 1 3 0 #12000000" />
+      <Setter Property="Transitions">
+        <Transitions>
+          <BrushTransition Property="Background" Duration="0:0:0.15" />
+          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" />
+        </Transitions>
+      </Setter>
+      <Setter Property="RenderTransform" Value="scale(1)" />
+    </Style>
+    <Style Selector="Border.card:pointerover">
+      <Setter Property="Background" Value="{DynamicResource CardHoverBrush}" />
+    </Style>
+    <Style Selector="Border.card:pressed">
+      <Setter Property="RenderTransform" Value="scale(0.98)" />
+    </Style>
+
+    <!-- Small icon buttons -->
+    <Style Selector="Button.icon">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource SubtleBrush}" />
+      <Setter Property="Padding" Value="6,2" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="FontSize" Value="15" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+    <Style Selector="Button.icon:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AccentSoftBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+    </Style>
+    <Style Selector="Button.icon.on">
+      <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+    </Style>
+
+    <!-- Segmented control -->
+    <Style Selector="ToggleButton.seg">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource SubtleBrush}" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="0,5" />
+      <Setter Property="FontSize" Value="12.5" />
+      <Setter Property="FontWeight" Value="Medium" />
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Center" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="ToggleButton.seg:pointerover /template/ ContentPresenter">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+    <Style Selector="ToggleButton.seg:checked /template/ ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource CardBrush}" />
+      <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+      <Setter Property="BoxShadow" Value="0 1 2 0 #22000000" />
+    </Style>
+
+    <!-- Search box -->
+    <Style Selector="TextBox.search">
+      <Setter Property="Background" Value="{DynamicResource FieldBrush}" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Padding" Value="10,8" />
+      <Setter Property="FontSize" Value="13.5" />
+      <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+    </Style>
+    <Style Selector="TextBox.search:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{DynamicResource FieldBrush}" />
+    </Style>
+    <Style Selector="TextBox.search:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="{DynamicResource FieldBrush}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+      <Setter Property="BorderThickness" Value="1.5" />
+    </Style>
+
+    <!-- Theme swatches -->
+    <Style Selector="Button.swatch">
+      <Setter Property="Width" Value="30" />
+      <Setter Property="Height" Value="30" />
+      <Setter Property="CornerRadius" Value="15" />
+      <Setter Property="Margin" Value="0,0,10,0" />
+      <Setter Property="BorderThickness" Value="0" />
+      <Setter Property="Cursor" Value="Hand" />
+    </Style>
+    <Style Selector="Button.swatch.selected">
+      <Setter Property="BorderThickness" Value="3" />
+      <Setter Property="BorderBrush" Value="{DynamicResource TextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.h">
+      <Setter Property="Foreground" Value="{DynamicResource SubtleBrush}" />
+      <Setter Property="FontSize" Value="11.5" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Margin" Value="2,14,0,8" />
+    </Style>
+  </Window.Styles>
+
+  <!-- Outer margin leaves room for the drop shadow -->
+  <Border x:Name="Shell" Margin="12" CornerRadius="16"
+          Background="{DynamicResource BgBrush}"
+          BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+          BoxShadow="0 10 30 0 #40000000" ClipToBounds="True">
+    <Border.Transitions>
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="CubicEaseOut" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.22" Easing="CubicEaseOut" />
+      </Transitions>
+    </Border.Transitions>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
+      <!-- Header (drag area) -->
+      <Grid x:Name="Header" Grid.Row="0" ColumnDefinitions="*,Auto" Margin="18,16,12,0" Background="Transparent">
+        <StackPanel>
+          <TextBlock Text="Clipboard History" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" />
+          <TextBlock x:Name="CountText" FontSize="12" Foreground="{DynamicResource SubtleBrush}" />
+        </StackPanel>
+        <Button Grid.Column="1" Classes="icon" x:Name="SettingsButton" Content="⚙" FontSize="17"
+                ToolTip.Tip="Settings" Click="OnSettingsClick" />
+      </Grid>
+
+      <!-- Search -->
+      <TextBox Grid.Row="1" x:Name="SearchBox" Classes="search" Margin="16,12,16,0"
+               Watermark="Search clipboard history" />
+
+      <!-- Segmented All / Pinned -->
+      <Border Grid.Row="2" Margin="16,10,16,6" Padding="2" CornerRadius="9" Background="{DynamicResource FieldBrush}">
+        <Grid ColumnDefinitions="*,*">
+          <ToggleButton x:Name="AllTab" Classes="seg" Content="All" IsChecked="True" Click="OnTabClick" />
+          <ToggleButton x:Name="PinnedTab" Grid.Column="1" Classes="seg" Content="Pinned" Click="OnTabClick" />
+        </Grid>
+      </Border>
+
+      <!-- List -->
+      <Panel Grid.Row="3">
+        <ScrollViewer x:Name="ListView" Padding="16,6,16,10">
+          <ItemsControl x:Name="Items" ItemsSource="{Binding Filtered}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="local:ClipItem">
+                <Border Classes="card" PointerReleased="OnCardReleased">
+                  <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                    <TextBlock Grid.Row="0" Text="{Binding Preview}" TextWrapping="Wrap" MaxLines="3"
+                               TextTrimming="CharacterEllipsis" FontSize="13.5" LineHeight="19"
+                               Foreground="{DynamicResource TextBrush}" />
+                    <StackPanel Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal" Margin="6,-2,-6,0">
+                      <Button Classes="icon" Classes.on="{Binding Pinned}" Content="{Binding PinGlyph}"
+                              ToolTip.Tip="Pin" Click="OnPinClick" />
+                      <Button Classes="icon" Content="✕" FontSize="12" Padding="7,4"
+                              ToolTip.Tip="Remove" Click="OnDeleteClick" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="1" Text="{Binding TimeLabel}" FontSize="11"
+                               Margin="0,6,0,0" Foreground="{DynamicResource SubtleBrush}" />
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+
+        <TextBlock x:Name="EmptyText" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   TextAlignment="Center" FontSize="13" Foreground="{DynamicResource SubtleBrush}"
+                   Text="Nothing here yet.&#10;Copy some text and it will show up." />
+
+        <!-- Settings panel -->
+        <ScrollViewer x:Name="SettingsPanel" IsVisible="False" Padding="18,0,18,16">
+          <StackPanel>
+            <TextBlock Classes="h" Text="APPEARANCE" />
+            <Border Background="{DynamicResource FieldBrush}" Padding="2" CornerRadius="9">
+              <Grid ColumnDefinitions="*,*">
+                <ToggleButton x:Name="LightMode" Classes="seg" Content="Light" Click="OnModeClick" />
+                <ToggleButton x:Name="DarkMode" Grid.Column="1" Classes="seg" Content="Dark" Click="OnModeClick" />
+              </Grid>
+            </Border>
+
+            <TextBlock Classes="h" Text="ACCENT COLOR" />
+            <StackPanel x:Name="Swatches" Orientation="Horizontal" />
+            <TextBlock x:Name="ThemeName" FontSize="12" Margin="2,8,0,0" Foreground="{DynamicResource SubtleBrush}" />
+
+            <TextBlock Classes="h" Text="HISTORY" />
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock Text="Items to keep" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}" FontSize="13" />
+              <ComboBox x:Name="MaxItemsBox" Grid.Column="1" MinWidth="90" SelectionChanged="OnMaxItemsChanged" />
+            </Grid>
+            <Button Content="Clear unpinned history" Margin="0,14,0,0" HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center" CornerRadius="9" Padding="0,8"
+                    Foreground="#FF3B30" Background="{DynamicResource FieldBrush}" Click="OnClearClick" />
+
+            <TextBlock Margin="2,18,0,0" FontSize="11.5" TextWrapping="Wrap" Foreground="{DynamicResource SubtleBrush}"
+                       Text="Click any item to copy it. Press Ctrl+Shift+V anywhere to open Clipboard History, Esc to close." />
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- "Copied" toast -->
+        <Border x:Name="Toast" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,18"
+                Padding="14,7" CornerRadius="16" Background="{DynamicResource AccentBrush}"
+                Opacity="0" IsHitTestVisible="False">
+          <Border.Transitions>
+            <Transitions>
+              <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
+            </Transitions>
+          </Border.Transitions>
+          <TextBlock Text="Copied" Foreground="White" FontWeight="SemiBold" FontSize="12.5" />
+        </Border>
+      </Panel>
+    </Grid>
+  </Border>
+</Window>
