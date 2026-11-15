@@ -4,7 +4,7 @@
         x:Class="ClipboardHistory.MainWindow"
         x:DataType="local:MainWindow"
         Title="Clipboard History"
-        Width="380" Height="560"
+        Width="350" Height="540"
         SystemDecorations="None"
         CanResize="False"
         ShowInTaskbar="False"
@@ -155,8 +155,8 @@
 
       <!-- List -->
       <Panel Grid.Row="3">
-        <ScrollViewer x:Name="ListView" Padding="16,6,16,10">
-          <ItemsControl x:Name="Items" ItemsSource="{Binding Filtered}">
+        <ScrollViewer x:Name="ListView" HorizontalScrollBarVisibility="Disabled">
+          <ItemsControl x:Name="Items" Margin="16,6,16,10" ItemsSource="{Binding Filtered}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="local:ClipItem">
                 <Border Classes="card" PointerReleased="OnCardReleased">
@@ -164,7 +164,7 @@
                     <TextBlock Grid.Row="0" Text="{Binding Preview}" TextWrapping="Wrap" MaxLines="3"
                                TextTrimming="CharacterEllipsis" FontSize="13.5" LineHeight="19"
                                Foreground="{DynamicResource TextBrush}" />
-                    <StackPanel Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal" Margin="6,-2,-6,0">
+                    <StackPanel Grid.Column="1" Grid.RowSpan="2" Orientation="Horizontal" Margin="6,-2,-4,0">
                       <Button Classes="icon" Classes.on="{Binding Pinned}" Content="{Binding PinGlyph}"
                               ToolTip.Tip="Pin" Click="OnPinClick" />
                       <Button Classes="icon" Content="✕" FontSize="12" Padding="7,4"
@@ -184,8 +184,8 @@
                    Text="Nothing here yet.&#10;Copy some text and it will show up." />
 
         <!-- Settings panel -->
-        <ScrollViewer x:Name="SettingsPanel" IsVisible="False" Padding="18,0,18,16">
-          <StackPanel>
+        <ScrollViewer x:Name="SettingsPanel" IsVisible="False" HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Margin="18,0,18,16">
             <TextBlock Classes="h" Text="APPEARANCE" />
             <Border Background="{DynamicResource FieldBrush}" Padding="2" CornerRadius="9">
               <Grid ColumnDefinitions="*,*">
