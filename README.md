@@ -2,6 +2,16 @@
 
 A small, clean clipboard manager for Windows. It sits in your system tray, remembers everything you copy, and lets you find it again in a second.
 
+<p align="center">
+  <img src="docs/screenshot-light.png" alt="Clipboard History in light mode" width="324">
+  &nbsp;&nbsp;
+  <img src="docs/screenshot-dark.png" alt="Clipboard History in dark mode" width="324">
+</p>
+
+<p align="center">
+  <a href="https://github.com/HenningDev1/ClipboardHistory/releases/latest"><b>⬇ Download the latest version</b></a>
+</p>
+
 ## Features
 
 - **Remembers what you copy:** every piece of text you copy is saved automatically

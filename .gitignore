@@ -5,3 +5,4 @@ dist/
 Installer/bin/
 Installer/obj/
 Installer/payload.zip
+Release/
